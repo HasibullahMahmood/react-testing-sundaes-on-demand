@@ -3,6 +3,7 @@ import { rest } from 'msw';
 
 import { server } from '../../../mocks/server';
 import OrderEntry from '../OrderEntry';
+import { OrderDetailProvider } from '../../../contexts/OrderDetail';
 
 test('Order entry catches error correctly', async () => {
 	server.resetHandlers(
@@ -14,7 +15,7 @@ test('Order entry catches error correctly', async () => {
 		})
 	);
 
-	render(<OrderEntry />);
+	render(<OrderEntry />, { wrapper: OrderDetailProvider });
 
 	await waitFor(async () => {
 		const alerts = await screen.findAllByRole('alert');

@@ -38,13 +38,12 @@ export default function Options({ optionType }) {
 			updateOptionCount={(optionName, count) => updateOptionCount(optionType, optionName, count)}
 		/>
 	));
-
 	return (
 		<>
 			<h2>{title}</h2>
 			<p>{pricePerItem[optionType]} each</p>
 			<p>
-				{title} total: {orderDetail.totals[optionType]}
+				{title} subtotal: {orderDetail.totals[optionType]}
 			</p>
 			<Row>{OptionItems}</Row>
 		</>

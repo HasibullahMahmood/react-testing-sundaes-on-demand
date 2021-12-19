@@ -21,23 +21,31 @@ const calculateSubtotal = (optionType, optionCounts) => {
 	return totalCount * prices[optionType];
 };
 
+const formatToCurrency = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	minimumFractionDigits: 2,
+});
+
 export const OrderDetailProvider = (props) => {
 	const [optionCounts, setOptionCounts] = useState({
 		scoops: new Map(),
 		toppings: new Map(),
 	});
 
+	const zeroCurrency = formatToCurrency.format(0);
+
 	const [totals, setTotals] = useState({
-		scoopsSubtotal: 0,
-		toppingsSubtotal: 0,
-		grandTotal: 0,
+		scoops: zeroCurrency,
+		toppings: zeroCurrency,
+		grandTotal: zeroCurrency,
 	});
 
 	useEffect(() => {
-		const scoopsSubtotal = calculateSubtotal('scoops', optionCounts);
-		const toppingsSubtotal = calculateSubtotal('toppings', optionCounts);
+		const scoopsSubtotal = formatToCurrency.format(calculateSubtotal('scoops', optionCounts));
+		const toppingsSubtotal = formatToCurrency.format(calculateSubtotal('toppings', optionCounts));
 		const grandTotal = scoopsSubtotal + toppingsSubtotal;
-		setTotals({ scoopsSubtotal, toppingsSubtotal, grandTotal });
+		setTotals({ scoops: scoopsSubtotal, toppings: toppingsSubtotal, grandTotal });
 	}, [optionCounts]);
 
 	const value = useMemo(() => {
