@@ -1,10 +1,9 @@
-import { screen, render } from '@testing-library/react';
+import { screen, render } from '../../../test-utils/library-test-utils';
 import userEvent from '@testing-library/user-event';
 import Options from '../Options';
-import { OrderDetailProvider } from '../../../contexts/OrderDetail';
 
 test('adding to toppings updates subtotal', async () => {
-	render(<Options optionType="scoops" />, { wrapper: OrderDetailProvider });
+	render(<Options optionType="scoops" />);
 
 	// check whether subtotal starts with $0.00
 	const subtotal = screen.getByText('Scoops subtotal: $', { exact: false });
