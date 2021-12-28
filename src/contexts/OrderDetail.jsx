@@ -42,10 +42,14 @@ export const OrderDetailProvider = (props) => {
 	});
 
 	useEffect(() => {
-		const scoopsSubtotal = formatToCurrency.format(calculateSubtotal('scoops', optionCounts));
-		const toppingsSubtotal = formatToCurrency.format(calculateSubtotal('toppings', optionCounts));
+		const scoopsSubtotal = calculateSubtotal('scoops', optionCounts);
+		const toppingsSubtotal = calculateSubtotal('toppings', optionCounts);
 		const grandTotal = scoopsSubtotal + toppingsSubtotal;
-		setTotals({ scoops: scoopsSubtotal, toppings: toppingsSubtotal, grandTotal });
+		setTotals({
+			scoops: formatToCurrency.format(scoopsSubtotal),
+			toppings: formatToCurrency.format(toppingsSubtotal),
+			grandTotal: formatToCurrency.format(grandTotal),
+		});
 	}, [optionCounts]);
 
 	const value = useMemo(() => {

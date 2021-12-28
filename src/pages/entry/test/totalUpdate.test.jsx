@@ -1,6 +1,7 @@
 import { screen, render } from '../../../test-utils/library-test-utils';
 import userEvent from '@testing-library/user-event';
 import Options from '../Options';
+import OrderEntry from '../OrderEntry';
 
 test('adding to toppings updates subtotal', async () => {
 	render(<Options optionType="scoops" />);
@@ -22,4 +23,47 @@ test('adding to toppings updates subtotal', async () => {
 
 	userEvent.type(chocolateInput, '2');
 	expect(subtotal).toHaveTextContent('6.00');
+});
+
+test('Toppings subtotal calculates correctly', async () => {
+	render(<Options optionType="toppings" />);
+
+	const subtotal = screen.getByText('Toppings subtotal: $', { exact: false });
+	// by default subtotal should start from 0
+	expect(subtotal).toHaveTextContent('0.00');
+
+	// find cherries checkbox, click and expect subtotal to be 1.50
+	const cherriesCheckbox = await screen.findByRole('checkbox', { name: 'Cherries' });
+	userEvent.click(cherriesCheckbox);
+	expect(subtotal).toHaveTextContent('1.50');
+
+	// find Hot fudge checkbox, click and expect subtotal to be 3.00
+	const hotFudgeCheckbox = await screen.findByRole('checkbox', { name: 'Hot fudge' });
+	userEvent.click(hotFudgeCheckbox);
+	expect(subtotal).toHaveTextContent('3.00');
+
+	// uncheck hot fudge and expect subtotal to be 1.50
+	userEvent.click(hotFudgeCheckbox);
+	expect(subtotal).toHaveTextContent('1.50');
+});
+
+describe('Grand total test', () => {
+	test('Grand total is 0 by default', () => {
+		render(<OrderEntry />);
+		const grandTotal = screen.getByRole('heading', { name: /Grand total: \$/i });
+		expect(grandTotal).toHaveTextContent(0.0);
+	});
+
+	test('Adding to topping then scoop updates grand total', async () => {
+		render(<OrderEntry />);
+		const grandTotal = screen.getByRole('heading', { name: /Grand total: \$/i });
+		const cherriesCheckbox = await screen.findByRole('checkbox', { name: 'Cherries' });
+		userEvent.click(cherriesCheckbox);
+		expect(grandTotal).toHaveTextContent(1.5);
+
+		const vanillaScoop = await screen.findByRole('spinbutton', { name: 'Vanilla' });
+		userEvent.clear(vanillaScoop);
+		userEvent.type(vanillaScoop, '1');
+		expect(grandTotal).toHaveTextContent(3.5);
+	});
 });
