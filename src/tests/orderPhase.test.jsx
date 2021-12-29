@@ -14,9 +14,7 @@ test('order phases for happy path', async () => {
 
 	const hotFudgeCheckbox = await screen.findByRole('checkbox', { name: 'Hot fudge' });
 	userEvent.click(hotFudgeCheckbox);
-});
 
-test.skip('order phases for happy path2', async () => {
 	// find and click order button
 	const button = screen.getByRole('button', { name: 'Order Sundaes' });
 	userEvent.click(button);
@@ -32,14 +30,15 @@ test.skip('order phases for happy path2', async () => {
 	userEvent.click(termsCheckbox);
 	const confirmBtn = await screen.findByRole('button', { name: 'Confirm Order' });
 	userEvent.click(confirmBtn);
+
 	// confirm order number on confirmation page
 	const orderNumber = await screen.findByText('Your order number is ', { exact: false });
 	expect(orderNumber).toHaveTextContent('1234567890');
+
 	// click 'new order' button on confirmation page
 	const newOrderBtn = await screen.findByRole('button', { name: 'Create new order' });
 	userEvent.click(newOrderBtn);
 	// check that scoop and toppings subtotals have been reset
 	expect(await screen.findByText('Scoops subtotal: $', { exact: false })).toHaveTextContent('0.00');
 	expect(await screen.findByText('Toppings subtotal: $', { exact: false })).toHaveTextContent('0.00');
-	// do we need to await anything to avoid test errors?
 });
