@@ -52,13 +52,20 @@ export const OrderDetailProvider = (props) => {
 		});
 	}, [optionCounts]);
 
+	const reset = () => {
+		setOptionCounts({
+			scoops: new Map(),
+			toppings: new Map(),
+		});
+	};
+
 	const value = useMemo(() => {
 		const updateCounts = (optionType, optionName, count) => {
 			const newOptionCounts = { ...optionCounts };
 			newOptionCounts[optionType].set(optionName, +count);
 			setOptionCounts(newOptionCounts);
 		};
-		return [{ ...optionCounts, totals }, updateCounts];
+		return [{ ...optionCounts, totals }, updateCounts, reset];
 	}, [optionCounts, totals]);
 
 	return <OrderDetailContext.Provider value={value} {...props} />;

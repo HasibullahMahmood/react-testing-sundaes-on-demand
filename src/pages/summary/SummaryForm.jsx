@@ -29,7 +29,7 @@ export default function SummaryForm(props) {
 					onChange={(e) => setIsChecked(e.target.checked)}
 				/>
 			</Form.Group>
-			<Button type="submit" disabled={!isChecked} onClick={() => props.setOrderPhase('complete')}>
+			<Button type="submit" disabled={!isChecked} onClick={() => props.setOrderPhase('completed')}>
 				Confirm Order
 			</Button>
 		</Form>

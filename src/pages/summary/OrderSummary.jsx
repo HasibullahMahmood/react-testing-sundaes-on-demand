@@ -3,7 +3,7 @@ import { useOrderDetail } from '../../contexts/OrderDetail';
 
 const OrderSummary = (props) => {
 	const [values] = useOrderDetail();
-	console.log(values);
+
 	return (
 		<div>
 			<h1>Order Summary</h1>
