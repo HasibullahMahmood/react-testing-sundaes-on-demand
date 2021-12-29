@@ -7,14 +7,14 @@ test('adding to toppings updates subtotal', async () => {
 	render(<Options optionType="scoops" />);
 
 	// check whether subtotal starts with $0.00
-	const subtotal = screen.getByText('Scoops subtotal: $', { exact: false });
+	const subtotal = await screen.findByText('Scoops subtotal: $', { exact: false });
 	expect(subtotal).toHaveTextContent('0.00');
 
 	// add 1 to vanilla and subtotal should be $2.00
 	const vanillaInput = await screen.findByRole('spinbutton', { name: 'Vanilla' });
 	userEvent.clear(vanillaInput);
-
 	userEvent.type(vanillaInput, '1');
+
 	expect(subtotal).toHaveTextContent('2.00');
 
 	// add 2 chocolate toppings and subtotal should be $6.00
@@ -48,10 +48,13 @@ test('Toppings subtotal calculates correctly', async () => {
 });
 
 describe('Grand total test', () => {
-	test('Grand total is 0 by default', () => {
+	test('Grand total is 0 by default', async () => {
 		render(<OrderEntry />);
-		const grandTotal = screen.getByRole('heading', { name: /Grand total: \$/i });
-		expect(grandTotal).toHaveTextContent(0.0);
+		const grandTotal = await screen.findByRole('heading', { name: /Grand total: \$/i });
+		expect(grandTotal).toHaveTextContent('0.00');
+
+		// await for further rendering and avoiding error
+		await screen.findByRole('spinbutton', { name: 'Vanilla' });
 	});
 
 	test('Adding to topping then scoop updates grand total', async () => {
